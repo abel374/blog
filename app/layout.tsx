@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navibar"
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +20,11 @@ export default function RootLayout({
     <html lang="en">
       <meta name="msvalidate.01" content="120B2315344862DA76D8B598018BCE67" />
       <body className={inter.className}>
-      <Navbar/>
+        <Navbar />
         {children}
-        </body>
+        <Footer />
+      </body>
     </html>
-    
+
   );
 }
