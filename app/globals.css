@@ -24,4 +24,16 @@
   section {
     @apply py-10;
   }
+
+
+
+
+
+
+}
+
+@layer components{
+  .special-word {
+    @apply text-primaryColor
+  }
 }

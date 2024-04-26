@@ -21,6 +21,14 @@ const config: Config = {
       whiteColor:"#d3d3d3",
      }
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "1.5rem",
+      }
+
+    }
   },
   plugins: [],
 };
