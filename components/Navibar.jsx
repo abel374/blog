@@ -7,7 +7,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
-  const loggedin = true;
+  const loggedin = false;
   const pathname = usePathname();
   const [showDropdown, setshowDropdown] = useState(false);
   const handleShowDropdown = () => setshowDropdown((prev) => true);
