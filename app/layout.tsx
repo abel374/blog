@@ -20,7 +20,8 @@ export default function RootLayout({
       <meta name="msvalidate.01" content="120B2315344862DA76D8B598018BCE67" />
       <body className={inter.className}>
       <Navbar/>
-        {children}</body>
+        {children}
+        </body>
     </html>
     
   );
