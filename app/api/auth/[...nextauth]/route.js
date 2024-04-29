@@ -53,6 +53,7 @@ export const authOptions = {
       }
 
       return token;
+      //Ajuste
     },
 
     async session({ session, token }) {
