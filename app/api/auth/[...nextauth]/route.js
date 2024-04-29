@@ -1,5 +1,4 @@
-//import NextAuth from "next-auth";
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import User from "@/models/User";
@@ -54,7 +53,6 @@ export const authOptions = {
       }
 
       return token;
-      //Ajuste
     },
 
     async session({ session, token }) {
