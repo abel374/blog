@@ -1,54 +1,107 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import abel from "@/public/img/abel.jpg";
+import demoImage from "@/public/img/demo_image.jpg";
 import { AiOutlineClose } from "react-icons/ai";
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
-  const loggedin = false;
-  const pathname = usePathname();
-  const [showDropdown, setshowDropdown] = useState(false);
-  const handleShowDropdown = () => setshowDropdown((prev) => true);
-  const handleHideDropdown = () => setshowDropdown((prev) => false);
+  const [userData, setUserData] = useState({});
+  const { data: session, status } = useSession();
 
+  const pathname = usePathname();
+
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  async function fetchUser() {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/user/${session?.user?._id}`
+      );
+
+      const resData = await res.json();
+
+      setUserData(resData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchUser();
+  }, [session?.user?._id]);
+
+  const handleShowDropdown = () => setShowDropdown((prev) => true);
+  const handleHideDropdown = () => setShowDropdown((prev) => false);
   return (
     <div className="container py-2 h-16 flex items-center justify-between">
       <Link href="/">
         <h2>
-          Systan<span className="special-word">Notícias.</span>
+          Light<span className="special-word">Code.</span>
         </h2>
       </Link>
-      <ul className=" flex items-center gap-3">
-        <li className="">
-          <Link href="/blog" className={ pathname === '/blog' ? "text-primaryColor font-bold" : ""}> Blogue</Link>
+
+      <ul className="flex items-center gap-3">
+        <li>
+          <Link
+            href="/blog"
+            className={
+              pathname === "/blog" ? "text-primaryColor font-bold" : ""
+            }
+          >
+            Blog
+          </Link>
         </li>
-        {loggedin ? (
+
+        {session?.user ? (
           <>
             <li>
-              <Link href="/create-blog" 
-              className={ pathname === '/create-blog' ? "text-primaryColor font-bold" : ""}
-              > Criar</Link>
+              <Link
+                href="/create-blog"
+                className={
+                  pathname === "/create-blog"
+                    ? "text-primaryColor font-bold"
+                    : ""
+                }
+              >
+                Create
+              </Link>
             </li>
             <li>
-              <div classeName="relative">
+              <div className="relative">
                 <Image
                   onClick={handleShowDropdown}
-                  src={abel}
+                  src={
+                    userData?.avatar?.url ? userData?.avatar?.url : demoImage
+                  }
                   alt="avatar"
+                  width={0}
+                  height={0}
                   sizes="100vw"
                   className="w-10 h-10 rounded-full cursor-pointer"
                 />
+
                 {showDropdown && (
                   <div className="absolute top-0 right-0 bg-primaryColorLight p-5">
                     <AiOutlineClose
                       onClick={handleHideDropdown}
                       className="w-full cursor-pointer"
                     />
-                    <button onClick={handleHideDropdown}> Sair</button>
-                    <Link onClick={handleHideDropdown} href="/user">
-                      Perfil
+                    <button
+                      onClick={() => {
+                        signOut();
+                        handleHideDropdown();
+                      }}
+                    >
+                      Logout
+                    </button>
+                    <Link
+                      onClick={handleHideDropdown}
+                      href={`/user/${session?.user?._id.toString()}`}
+                    >
+                      Profile
                     </Link>
                   </div>
                 )}
@@ -57,11 +110,25 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <li className="">
-              <Link href="/login" className={ pathname === '/login' ? "text-primaryColor font-bold" : ""}> Conecte-se</Link>
+            <li>
+              <Link
+                href="/login"
+                className={
+                  pathname === "/login" ? "text-primaryColor font-bold" : ""
+                }
+              >
+                Log In
+              </Link>
             </li>
-            <li className="">
-              <Link href="/signup" className={ pathname === '/signup' ? "text-primaryColor font-bold" : ""}> Inscrever-se</Link>
+            <li>
+              <Link
+                href="/signup"
+                className={
+                  pathname === "/signup" ? "text-primaryColor font-bold" : ""
+                }
+              >
+                Sign Up
+              </Link>
             </li>
           </>
         )}
